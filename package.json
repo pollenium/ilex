@@ -1,0 +1,26 @@
+{
+  "name": "pollenium-ilex",
+  "version": "0.0.0",
+  "description": "",
+  "main": "node/index.js",
+  "scripts": {
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pollenium/ilex.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pollenium/ilex/issues"
+  },
+  "homepage": "https://github.com/pollenium/ilex#readme",
+  "devDependencies": {
+    "tsc": "^1.20150623.0",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "pollenium-buttercup": "^3.1.1"
+  }
+}
