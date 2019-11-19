@@ -1,30 +1,26 @@
-import { Bytes, Bytes1, Bytes32 } from 'pollenium-buttercup'
+import * as uvaursi from 'pollenium-uvaursi'
 
 export class Ilex {
-  concatenation: Bytes;
+  private concatenation: Uint8Array;
   constructor(
-    public v: Bytes1,
-    public r: Bytes32,
-    public s: Bytes32
+    public v: Uint8Array,
+    public r: Uint8Array,
+    public s: Uint8Array
   ) {}
 
   getConcatenation() {
     if (this.concatenation) {
       return this.concatenation
     }
-    this.concatenation =
-      Bytes.fromArray([])
-        .getAppended(this.v)
-        .getAppended(this.r)
-        .getAppended(this.s)
+    this.concatenation = uvaursi.concat([this.v, this.r, this.s])
     return this.concatenation
   }
 
-  static fromConcatenation(concatenation: Bytes) {
+  static fromConcatenation(concatenation: Uint8Array) {
     return new Ilex(
-      concatenation.getSlice(0, 1).getCasted(Bytes1),
-      concatenation.getSlice(1, 33).getCasted(Bytes32),
-      concatenation.getSlice(33, 65).getCasted(Bytes32)
+      concatenation.slice(0, 1),
+      concatenation.slice(1, 33),
+      concatenation.slice(33, 65)
     )
   }
 }
