@@ -1,21 +1,30 @@
-import { Buttercup } from 'pollenium-buttercup'
+import { Bytes, Bytes1, Bytes32 } from 'pollenium-buttercup'
 
 export class Ilex {
+  concatenation: Bytes;
   constructor(
-    public v: Buttercup,
-    public r: Buttercup,
-    public s: Buttercup
+    public v: Bytes1,
+    public r: Bytes32,
+    public s: Bytes32
   ) {}
 
   getConcatenation() {
-    return this.v.append(this.r).append(this.s)
+    if (this.concatenation) {
+      return this.concatenation
+    }
+    this.concatenation =
+      Bytes.fromArray([])
+        .getAppended(this.v)
+        .getAppended(this.r)
+        .getAppended(this.s)
+    return this.concatenation
   }
 
-  static fromConcatenation(concatenation: Buttercup) {
+  static fromConcatenation(concatenation: Bytes) {
     return new Ilex(
-      concatenation.slice(0, 1),
-      concatenation.slice(1, 33),
-      concatenation.slice(33, 65)
+      concatenation.getSlice(0, 1).getCasted(Bytes1),
+      concatenation.getSlice(1, 33).getCasted(Bytes32),
+      concatenation.getSlice(33, 65).getCasted(Bytes32)
     )
   }
 }
