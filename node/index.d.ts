@@ -1,9 +1,10 @@
+import { Uint8, Bytes32, Bytes } from 'pollenium-buttercup';
 export declare class Ilex {
-    v: Uint8Array;
-    r: Uint8Array;
-    s: Uint8Array;
+    v: Uint8;
+    r: Bytes32;
+    s: Bytes32;
     private concatenation;
-    constructor(v: Uint8Array, r: Uint8Array, s: Uint8Array);
-    getConcatenation(): Uint8Array;
-    static fromConcatenation(concatenation: Uint8Array): Ilex;
+    constructor(v: Uint8, r: Bytes32, s: Bytes32);
+    getConcatenation(): Bytes;
+    static fromConcatenation(concatenation: Bytes): Ilex;
 }

@@ -21,6 +21,6 @@
     "typescript": "^3.7.2"
   },
   "dependencies": {
-    "pollenium-uvaursi": "^1.1.0"
+    "pollenium-buttercup": "^11.0.0"
   }
 }

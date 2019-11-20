@@ -1,13 +1,6 @@
 "use strict";
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 exports.__esModule = true;
-var uvaursi = __importStar(require("pollenium-uvaursi"));
+var pollenium_buttercup_1 = require("pollenium-buttercup");
 var Ilex = /** @class */ (function () {
     function Ilex(v, r, s) {
         this.v = v;
@@ -18,11 +11,14 @@ var Ilex = /** @class */ (function () {
         if (this.concatenation) {
             return this.concatenation;
         }
-        this.concatenation = uvaursi.concat([this.v, this.r, this.s]);
+        this.concatenation = pollenium_buttercup_1.Bytes.fromArray([])
+            .getAppended(this.v)
+            .getAppended(this.r)
+            .getAppended(this.s);
         return this.concatenation;
     };
     Ilex.fromConcatenation = function (concatenation) {
-        return new Ilex(concatenation.slice(0, 1), concatenation.slice(1, 33), concatenation.slice(33, 65));
+        return new Ilex(concatenation.getSlice(0, 1).getCasted(pollenium_buttercup_1.Uint8), concatenation.getSlice(1, 33).getCasted(pollenium_buttercup_1.Bytes32), concatenation.getSlice(33, 65).getCasted(pollenium_buttercup_1.Bytes32));
     };
     return Ilex;
 }());
