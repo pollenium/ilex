@@ -26,6 +26,6 @@
   },
   "dependencies": {
     "ethereumjs-util": "^6.2.0",
-    "pollenium-buttercup": "^11.1.0"
+    "pollenium-buttercup": "^13.0.0"
   }
 }
