@@ -4,7 +4,8 @@
   "description": "",
   "main": "node/index.js",
   "scripts": {
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -17,10 +18,14 @@
   },
   "homepage": "https://github.com/pollenium/ilex#readme",
   "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
     "tsc": "^1.20150623.0",
     "typescript": "^3.7.2"
   },
   "dependencies": {
-    "pollenium-buttercup": "^11.0.0"
+    "ethereumjs-util": "^6.2.0",
+    "pollenium-buttercup": "^11.1.0"
   }
 }
