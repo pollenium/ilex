@@ -14,8 +14,8 @@ var Signature = /** @class */ (function () {
         Object.assign(this, struct);
     }
     Signature.prototype.getSigner = function (message) {
-        var signerPublicKey = ejsUtil.ecrecover(message.getBuffer(), this.v.getNumber(), this.r.getBuffer(), this.s.getBuffer());
-        return pollenium_buttercup_1.Address.fromBuffer(ejsUtil.publicToAddress(signerPublicKey));
+        var signerPublicKey = ejsUtil.ecrecover(new Buffer(message.u), this.v.toNumber(), new Buffer(this.r.u), new Buffer(this.s.u));
+        return new pollenium_buttercup_1.Address(ejsUtil.publicToAddress(signerPublicKey));
     };
     return Signature;
 }());

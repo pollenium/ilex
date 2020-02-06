@@ -14,13 +14,13 @@ export class Signature implements SignatureInterface {
 
   getSigner(message: Bytes32): Address {
     const signerPublicKey = ejsUtil.ecrecover(
-      message.getBuffer(),
-      this.v.getNumber(),
-      this.r.getBuffer(),
-      this.s.getBuffer()
+      new Buffer(message.u),
+      this.v.toNumber(),
+      new Buffer(this.r.u),
+      new Buffer(this.s.u)
     )
 
-    return Address.fromBuffer(
+    return new Address(
       ejsUtil.publicToAddress(signerPublicKey)
     )
   }

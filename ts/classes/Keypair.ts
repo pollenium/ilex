@@ -5,7 +5,7 @@ import crypto from 'crypto'
 
 export class InvalidPrivateKeyError extends Error {
   constructor(privateKey: Bytes32) {
-    super(`Invalid privateKey: ${privateKey.getHex()}`)
+    super(`Invalid privateKey: ${privateKey.uu.toHex()}`)
     Object.setPrototypeOf(this, InvalidPrivateKeyError.prototype)
   }
 }
@@ -15,7 +15,7 @@ export class Keypair {
   private address: Address;
 
   constructor(public privateKey: Bytes32) {
-    if (!ejsUtil.isValidPrivate(privateKey.getBuffer())) {
+    if (!ejsUtil.isValidPrivate(new Buffer(privateKey.u))) {
       throw new InvalidPrivateKeyError(privateKey)
     }
   }
@@ -24,9 +24,9 @@ export class Keypair {
     if (this.address) {
       return this.address
     }
-    this.address = Address.fromBuffer(
+    this.address = new Address(
       ejsUtil.privateToAddress(
-        this.privateKey.getBuffer()
+        new Buffer(this.privateKey.u)
       )
     )
     return this.address
@@ -34,13 +34,13 @@ export class Keypair {
 
   getSignature(message: Bytes32): Signature {
     const ejsUtilSignature = ejsUtil.ecsign(
-      message.getBuffer(),
-      this.privateKey.getBuffer()
+      new Buffer(message.u),
+      new Buffer(this.privateKey.u)
     )
     return new Signature({
       v: Uint8.fromNumber(ejsUtilSignature.v),
-      r: Bytes32.fromBuffer(ejsUtilSignature.r),
-      s: Bytes32.fromBuffer(ejsUtilSignature.s)
+      r: new Bytes32(ejsUtilSignature.r),
+      s: new Bytes32(ejsUtilSignature.s)
     })
   }
 
@@ -54,7 +54,7 @@ export class Keypair {
       !ejsUtil.isValidPrivate(privateKeyBuffer)
     )
 
-    const privateKey = Bytes32.fromBuffer(privateKeyBuffer)
+    const privateKey = new Bytes32(privateKeyBuffer)
 
     return new Keypair(privateKey)
   }

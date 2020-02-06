@@ -30,7 +30,7 @@ var crypto_1 = __importDefault(require("crypto"));
 var InvalidPrivateKeyError = /** @class */ (function (_super) {
     __extends(InvalidPrivateKeyError, _super);
     function InvalidPrivateKeyError(privateKey) {
-        var _this = _super.call(this, "Invalid privateKey: " + privateKey.getHex()) || this;
+        var _this = _super.call(this, "Invalid privateKey: " + privateKey.uu.toHex()) || this;
         Object.setPrototypeOf(_this, InvalidPrivateKeyError.prototype);
         return _this;
     }
@@ -40,7 +40,7 @@ exports.InvalidPrivateKeyError = InvalidPrivateKeyError;
 var Keypair = /** @class */ (function () {
     function Keypair(privateKey) {
         this.privateKey = privateKey;
-        if (!ejsUtil.isValidPrivate(privateKey.getBuffer())) {
+        if (!ejsUtil.isValidPrivate(new Buffer(privateKey.u))) {
             throw new InvalidPrivateKeyError(privateKey);
         }
     }
@@ -48,15 +48,15 @@ var Keypair = /** @class */ (function () {
         if (this.address) {
             return this.address;
         }
-        this.address = pollenium_buttercup_1.Address.fromBuffer(ejsUtil.privateToAddress(this.privateKey.getBuffer()));
+        this.address = new pollenium_buttercup_1.Address(ejsUtil.privateToAddress(new Buffer(this.privateKey.u)));
         return this.address;
     };
     Keypair.prototype.getSignature = function (message) {
-        var ejsUtilSignature = ejsUtil.ecsign(message.getBuffer(), this.privateKey.getBuffer());
+        var ejsUtilSignature = ejsUtil.ecsign(new Buffer(message.u), new Buffer(this.privateKey.u));
         return new Signature_1.Signature({
             v: pollenium_buttercup_1.Uint8.fromNumber(ejsUtilSignature.v),
-            r: pollenium_buttercup_1.Bytes32.fromBuffer(ejsUtilSignature.r),
-            s: pollenium_buttercup_1.Bytes32.fromBuffer(ejsUtilSignature.s)
+            r: new pollenium_buttercup_1.Bytes32(ejsUtilSignature.r),
+            s: new pollenium_buttercup_1.Bytes32(ejsUtilSignature.s)
         });
     };
     Keypair.generate = function () {
@@ -64,7 +64,7 @@ var Keypair = /** @class */ (function () {
         do {
             privateKeyBuffer = crypto_1["default"].randomBytes(32);
         } while (!ejsUtil.isValidPrivate(privateKeyBuffer));
-        var privateKey = pollenium_buttercup_1.Bytes32.fromBuffer(privateKeyBuffer);
+        var privateKey = new pollenium_buttercup_1.Bytes32(privateKeyBuffer);
         return new Keypair(privateKey);
     };
     return Keypair;
