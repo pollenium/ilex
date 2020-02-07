@@ -1,5 +1,6 @@
 import { Signature } from './Signature'
-import { Bytes32, Address, Uint8, Bytes } from 'pollenium-buttercup'
+import { Bytes32, Address, Uint8, Bytes, Uintable } from 'pollenium-buttercup'
+import { Uish, Uu } from 'pollenium-uvaursi'
 import * as ejsUtil from 'ethereumjs-util'
 import crypto from 'crypto'
 
@@ -12,11 +13,14 @@ export class InvalidPrivateKeyError extends Error {
 
 export class Keypair {
 
+  readonly privateKey: Bytes32;
+
   private address: Address;
 
-  constructor(public privateKey: Bytes32) {
-    if (!ejsUtil.isValidPrivate(new Buffer(privateKey.u))) {
-      throw new InvalidPrivateKeyError(privateKey)
+  constructor(privateKeyUish: Uish) {
+    this.privateKey = new Bytes32(privateKeyUish)
+    if (!ejsUtil.isValidPrivate(new Buffer(this.privateKey.u))) {
+      throw new InvalidPrivateKeyError(this.privateKey)
     }
   }
 
@@ -32,13 +36,13 @@ export class Keypair {
     return this.address
   }
 
-  getSignature(message: Bytes32): Signature {
+  getSignature(message: Uish): Signature {
     const ejsUtilSignature = ejsUtil.ecsign(
-      new Buffer(message.u),
+      new Buffer(Uu.wrap(message).u),
       new Buffer(this.privateKey.u)
     )
     return new Signature({
-      v: Uint8.fromNumber(ejsUtilSignature.v),
+      v: new Uint8(ejsUtilSignature.v),
       r: new Bytes32(ejsUtilSignature.r),
       s: new Bytes32(ejsUtilSignature.s)
     })
@@ -54,8 +58,6 @@ export class Keypair {
       !ejsUtil.isValidPrivate(privateKeyBuffer)
     )
 
-    const privateKey = new Bytes32(privateKeyBuffer)
-
-    return new Keypair(privateKey)
+    return new Keypair(privateKeyBuffer)
   }
 }

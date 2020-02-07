@@ -25,6 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var Signature_1 = require("./Signature");
 var pollenium_buttercup_1 = require("pollenium-buttercup");
+var pollenium_uvaursi_1 = require("pollenium-uvaursi");
 var ejsUtil = __importStar(require("ethereumjs-util"));
 var crypto_1 = __importDefault(require("crypto"));
 var InvalidPrivateKeyError = /** @class */ (function (_super) {
@@ -38,10 +39,10 @@ var InvalidPrivateKeyError = /** @class */ (function (_super) {
 }(Error));
 exports.InvalidPrivateKeyError = InvalidPrivateKeyError;
 var Keypair = /** @class */ (function () {
-    function Keypair(privateKey) {
-        this.privateKey = privateKey;
-        if (!ejsUtil.isValidPrivate(new Buffer(privateKey.u))) {
-            throw new InvalidPrivateKeyError(privateKey);
+    function Keypair(privateKeyUish) {
+        this.privateKey = new pollenium_buttercup_1.Bytes32(privateKeyUish);
+        if (!ejsUtil.isValidPrivate(new Buffer(this.privateKey.u))) {
+            throw new InvalidPrivateKeyError(this.privateKey);
         }
     }
     Keypair.prototype.getAddress = function () {
@@ -52,9 +53,9 @@ var Keypair = /** @class */ (function () {
         return this.address;
     };
     Keypair.prototype.getSignature = function (message) {
-        var ejsUtilSignature = ejsUtil.ecsign(new Buffer(message.u), new Buffer(this.privateKey.u));
+        var ejsUtilSignature = ejsUtil.ecsign(new Buffer(pollenium_uvaursi_1.Uu.wrap(message).u), new Buffer(this.privateKey.u));
         return new Signature_1.Signature({
-            v: pollenium_buttercup_1.Uint8.fromNumber(ejsUtilSignature.v),
+            v: new pollenium_buttercup_1.Uint8(ejsUtilSignature.v),
             r: new pollenium_buttercup_1.Bytes32(ejsUtilSignature.r),
             s: new pollenium_buttercup_1.Bytes32(ejsUtilSignature.s)
         });
@@ -64,8 +65,7 @@ var Keypair = /** @class */ (function () {
         do {
             privateKeyBuffer = crypto_1["default"].randomBytes(32);
         } while (!ejsUtil.isValidPrivate(privateKeyBuffer));
-        var privateKey = new pollenium_buttercup_1.Bytes32(privateKeyBuffer);
-        return new Keypair(privateKey);
+        return new Keypair(privateKeyBuffer);
     };
     return Keypair;
 }());

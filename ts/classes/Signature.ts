@@ -1,20 +1,27 @@
-import { Uint8, Bytes32, Address } from 'pollenium-buttercup'
-import { SignatureInterface } from '../interfaces/Signature'
+import { Uint8, Bytes32, Address, Uintable } from 'pollenium-buttercup'
 import * as ejsUtil from 'ethereumjs-util'
+import { Uish, Uu } from 'pollenium-uvaursi'
 
-export class Signature implements SignatureInterface {
+export class Signature {
 
   v: Uint8;
   r: Bytes32;
   s: Bytes32;
 
-  constructor(struct: SignatureInterface) {
-    Object.assign(this, struct)
+  constructor(struct: {
+    v: Uintable,
+    r: Uish,
+    s: Uish,
+  }) {
+    const { v, r, s } = struct
+    this.v = new Uint8(v)
+    this.r = new Bytes32(r)
+    this.s = new Bytes32(s)
   }
 
-  getSigner(message: Bytes32): Address {
+  getSigner(message: Uish): Address {
     const signerPublicKey = ejsUtil.ecrecover(
-      new Buffer(message.u),
+      new Buffer(Uu.wrap(message).u),
       this.v.toNumber(),
       new Buffer(this.r.u),
       new Buffer(this.s.u)
