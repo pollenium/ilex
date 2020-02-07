@@ -1,2 +1,2 @@
 export { Keypair } from './classes/Keypair'
-export { Signature } from './classes/Signature'
+export { Signature, SignatureStruct } from './classes/Signature'

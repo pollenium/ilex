@@ -2,17 +2,19 @@ import { Uint8, Bytes32, Address, Uintable } from 'pollenium-buttercup'
 import * as ejsUtil from 'ethereumjs-util'
 import { Uish, Uu } from 'pollenium-uvaursi'
 
-export class Signature {
+export interface SignatureStruct {
+  v: Uintable,
+  r: Uish,
+  s: Uish,
+}
+
+export class Signature implements SignatureStruct {
 
   v: Uint8;
   r: Bytes32;
   s: Bytes32;
 
-  constructor(struct: {
-    v: Uintable,
-    r: Uish,
-    s: Uish,
-  }) {
+  constructor(struct: SignatureStruct) {
     const { v, r, s } = struct
     this.v = new Uint8(v)
     this.r = new Bytes32(r)
