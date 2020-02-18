@@ -21,6 +21,21 @@ var Signature = /** @class */ (function () {
         var signerPublicKey = ejsUtil.ecrecover(new Buffer(pollenium_uvaursi_1.Uu.wrap(message).u), this.v.toNumber(), new Buffer(this.r.u), new Buffer(this.s.u));
         return new pollenium_buttercup_1.Address(ejsUtil.publicToAddress(signerPublicKey));
     };
+    Signature.prototype.getEncoding = function () {
+        return pollenium_uvaursi_1.Uu.genConcat([
+            this.v,
+            this.r,
+            this.s
+        ]);
+    };
+    Signature.fromEncoding = function (encodingUish) {
+        var encoding = pollenium_uvaursi_1.Uu.wrap(encodingUish);
+        return new Signature({
+            v: encoding.u.slice(0, 1),
+            r: encoding.u.slice(1, 33),
+            s: encoding.u.slice(33, 65)
+        });
+    };
     return Signature;
 }());
 exports.Signature = Signature;

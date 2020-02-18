@@ -1,5 +1,5 @@
 import { Uint8, Bytes32, Address, Uintable } from 'pollenium-buttercup';
-import { Uish } from 'pollenium-uvaursi';
+import { Uish, Uu } from 'pollenium-uvaursi';
 export interface SignatureStruct {
     v: Uintable;
     r: Uish;
@@ -11,4 +11,6 @@ export declare class Signature implements SignatureStruct {
     s: Bytes32;
     constructor(struct: SignatureStruct);
     getSigner(message: Uish): Address;
+    getEncoding(): Uu;
+    static fromEncoding(encodingUish: Uish): Signature;
 }

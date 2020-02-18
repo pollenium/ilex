@@ -33,4 +33,21 @@ export class Signature implements SignatureStruct {
       ejsUtil.publicToAddress(signerPublicKey)
     )
   }
+
+  getEncoding(): Uu {
+    return Uu.genConcat([
+      this.v,
+      this.r,
+      this.s
+    ])
+  }
+
+  static fromEncoding(encodingUish: Uish) {
+    const encoding = Uu.wrap(encodingUish)
+    return new Signature({
+      v: encoding.u.slice(0, 1),
+      r: encoding.u.slice(1, 33),
+      s: encoding.u.slice(33, 65)
+    })
+  }
 }
